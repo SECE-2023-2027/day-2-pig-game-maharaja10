@@ -10,7 +10,6 @@ const btnNew = document.querySelector('.new-game');
 const btnRoll = document.querySelector('.roll-dice');
 const btnHold = document.querySelector('.hold');
 
-
 let scorePlayer1, scorePlayer2, currentScore, activePlayer, playing;
 
 const init = function () {
@@ -36,18 +35,17 @@ const init = function () {
 init();
 
 const switchPlayer = function () {
-  if (activePlayer === 1) {
-    current1El.textContent = '0';
-  } else {
-    current2El.textContent = '0';
+  switch (activePlayer) {
+    case 1:
+      current1El.textContent = '0';
+      activePlayer = 2;
+      break;
+    case 2:
+      current2El.textContent = '0';
+      activePlayer = 1;
+      break;
   }
   currentScore = 0;
-
-  if (activePlayer === 1) {
-    activePlayer = 2;
-  } else {
-    activePlayer = 1;
-  }
 
   player1El.classList.toggle('player--active');
   player2El.classList.toggle('player--active');
@@ -62,41 +60,46 @@ btnRoll.addEventListener('click', function () {
 
     if (dice !== 1) {
       currentScore += dice;
-      if (activePlayer === 1) {
-        current1El.textContent = currentScore;
-      } else {
-        current2El.textContent = currentScore;
+      switch (activePlayer) {
+        case 1:
+          current1El.textContent = currentScore;
+          break;
+        case 2:
+          current2El.textContent = currentScore;
+          break;
       }
     } else {
       switchPlayer();
     }
   }
 });
-
 btnHold.addEventListener('click', function () {
   if (playing) {
-    if (activePlayer === 1) {
-      scorePlayer1 += currentScore;
-      score1El.textContent = scorePlayer1;
-      if (scorePlayer1 >= 20) {
-        playing = false;
-        diceEl.style.display = 'none';
-        player1El.classList.add('player--winner');
-        player1El.classList.remove('player--active');
-      } else {
-        switchPlayer();
-      }
-    } else {
-      scorePlayer2 += currentScore;
-      score2El.textContent = scorePlayer2;
-      if (scorePlayer2 >= 20) {
-        playing = false;
-        diceEl.style.display = 'none';
-        player2El.classList.add('player--winner');
-        player2El.classList.remove('player--active');
-      } else {
-        switchPlayer();
-      }
+    switch (activePlayer) {
+      case 1:
+        scorePlayer1 += currentScore;
+        score1El.textContent = scorePlayer1;
+        if (scorePlayer1 >= 20) {
+          playing = false;
+          diceEl.style.display = 'none';
+          player1El.classList.add('player--winner');
+          player1El.classList.remove('player--active');
+        } else {
+          switchPlayer();
+        }
+        break;
+      case 2:
+        scorePlayer2 += currentScore;
+        score2El.textContent = scorePlayer2;
+        if (scorePlayer2 >= 20) {
+          playing = false;
+          diceEl.style.display = 'none';
+          player2El.classList.add('player--winner');
+          player2El.classList.remove('player--active');
+        } else {
+          switchPlayer();
+        }
+        break;
     }
   }
 });
